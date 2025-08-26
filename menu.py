@@ -10,7 +10,7 @@ class Menu:
         print("Name\tPrice\tQuantity")
         for item in self.items:
             print(f"{item.name}\t{item.price}\t{item.quantity}") 
-
+    
     def find_item(self,item_name):
         for item in self.items:
             if item.name.lower()==item_name.lower():

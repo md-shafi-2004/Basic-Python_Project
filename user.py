@@ -1,6 +1,7 @@
 from abc import ABC
 from order import Order 
 from food_item import Fooditem
+from menu import Menu
 
 class User(ABC):
     def __init__(self,name,email,phone,address):
@@ -23,7 +24,6 @@ class Customer(User):
             if ordered_quantity>inventory_item.quantity:
                 print("Item quantity exceeded !!")
             else:
-                inventory_item.quantity=inventory_item.quantity-ordered_quantity
                 ordered_item=Fooditem(item_name,inventory_item.price,ordered_quantity)
                 self.cart.add_item(ordered_item)
                 print("Item added")
@@ -35,11 +35,22 @@ class Customer(User):
         print("Name\tPrice\tQuantity")
         for item in self.cart.cart_items:
             print(f"{item.name}\t{item.price}\t{item.quantity}")
-        print(f"Total Price : {self.cart.total_price()}")
+        print(f"To proceed to the payment enter your total amount in Pay Bill option\nPayable amount is : {self.cart.total_price()}")
 
-    def pay_bill(self):
-        print(f"Total {self.cart.total_price()} paid successfully")
-        self.cart.clear()
+    def pay_bill(self,restaurant,total_amount):  #only when customer will pay successfully then stock will reduce from menu database
+        if total_amount==self.cart.total_price():
+            print(f"Total {total_amount} paid successfully")
+            for item in self.cart.cart_items:
+                inventory_item=restaurant.menu.find_item(item.name)
+                inventory_item.quantity-=item.quantity
+            self.cart.clear()
+        else:
+            if total_amount>self.cart.total_price():
+                print(f"You have entered {total_amount-self.cart.total_price()} more!!")
+                self.view_cart()
+            else:
+                print(f"You have entered {self.cart.total_price()-total_amount} less!!")
+                self.view_cart()
 
 class Employee(User):
     def __init__(self, name, email, phone, address,age,designation,salary):

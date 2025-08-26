@@ -30,7 +30,8 @@ def customer_menu():
         elif choice==3:
             customer.view_cart()
         elif choice==4:
-            customer.pay_bill()
+            total_amount=int(input("Please enter toatal amount : "))
+            customer.pay_bill(dominoes,total_amount)
         elif choice==5:
             break
         else:
