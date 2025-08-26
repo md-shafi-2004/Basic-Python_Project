@@ -1,6 +1,6 @@
 class Menu:
     def __init__(self):
-        self.items=[]  #this is our menu's database
+        self.items=[]  #this is our inventory menu's database
 
     def add_menu_item(self,item):
         self.items.append(item)
@@ -15,6 +15,7 @@ class Menu:
         for item in self.items:
             if item.name.lower()==item_name.lower():
                 return item
+        else:
             return None   
 
     def remove_item(self,item_name):

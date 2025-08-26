@@ -1,5 +1,6 @@
 from abc import ABC
 from order import Order 
+from food_item import Fooditem
 
 class User(ABC):
     def __init__(self,name,email,phone,address):
@@ -16,14 +17,15 @@ class Customer(User):
     def view_menu(self,restaurant):
         restaurant.menu.show_menu()
 
-    def add_to_cart(self,restaurant,item_name,quantity):
-        item=restaurant.menu.find_item(item_name)
-        if item:
-            if quantity>item.quantity:
+    def add_to_cart(self,restaurant,item_name,ordered_quantity):
+        inventory_item=restaurant.menu.find_item(item_name)
+        if inventory_item:
+            if ordered_quantity>inventory_item.quantity:
                 print("Item quantity exceeded !!")
             else:
-                item.quantity=quantity
-                self.cart.add_item(item)
+                inventory_item.quantity=inventory_item.quantity-ordered_quantity
+                ordered_item=Fooditem(item_name,inventory_item.price,ordered_quantity)
+                self.cart.add_item(ordered_item)
                 print("Item added")
         else:
             print("item not found")
@@ -31,8 +33,8 @@ class Customer(User):
     def view_cart(self):
         print("*******View Cart*******")
         print("Name\tPrice\tQuantity")
-        for item,quantity in self.cart.items.items():
-            print(f"{item.name}\t{item.price}\tquantity")
+        for item in self.cart.cart_items:
+            print(f"{item.name}\t{item.price}\t{item.quantity}")
         print(f"Total Price : {self.cart.total_price()}")
 
     def pay_bill(self):
